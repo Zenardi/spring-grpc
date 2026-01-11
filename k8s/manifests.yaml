@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: grpc-demo
+  template:
+    metadata:
+      labels:
+        app: grpc-demo
+    spec:
+      containers:
+      - name: grpc-demo
+        image: your-registry/demo:latest
+        ports:
+        - containerPort: 9090
+          name: grpc
+        # --- Native gRPC Health Probes (K8s 1.24+) ---
+        livenessProbe:
+          grpc:
+            port: 9090
+          initialDelaySeconds: 10
+        readinessProbe:
+          grpc:
+            port: 9090
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+spec:
+  type: ClusterIP
+  selector:
+    app: grpc-demo
+  ports:
+    - name: grpc
+      port: 9090
+      targetPort: 9090
