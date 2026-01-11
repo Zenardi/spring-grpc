@@ -28,9 +28,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/grpc-demo:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/grpc-demo:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/grpc-demo:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -51,14 +49,8 @@ jobs:
           
       - name: Deploy to Local Cluster
         run: |
-          # Since the agent is in-cluster, kubectl uses the ServiceAccount token
           echo "🚀 Applying manifests from k8s/ folder..."
           kubectl apply -f k8s/
           
-          # Update the deployment to use the specific image SHA just built
-          echo "🔄 Updating image to version ${{ github.sha }}..."
-          kubectl set image deployment/grpc-demo grpc-demo=${{ secrets.DOCKERHUB_USERNAME }}/grpc-demo:latest
-          
-          # Wait for the gRPC service to be ready
           echo "⏳ Waiting for rollout..."
-          kubectl rollout status deployment/grpc-demo --timeout=90s
+          kubectl rollout status deployment/grpc-demo -n grpc-demo --timeout=90s

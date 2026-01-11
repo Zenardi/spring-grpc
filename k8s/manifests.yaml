@@ -20,7 +20,8 @@ spec:
     spec:
       containers:
       - name: grpc-demo
-        image: your-registry/demo:latest
+        image: ${DOCKERHUB_USERNAME}/grpc-demo:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
           name: http
