@@ -57,7 +57,7 @@ jobs:
           
           # Update the deployment to use the specific image SHA just built
           echo "🔄 Updating image to version ${{ github.sha }}..."
-          kubectl set image deployment/grpc-demo grpc-demo=${{ secrets.DOCKERHUB_USERNAME }}/grpc-demo:${{ github.sha }}
+          kubectl set image deployment/grpc-demo grpc-demo=${{ secrets.DOCKERHUB_USERNAME }}/grpc-demo:latest
           
           # Wait for the gRPC service to be ready
           echo "⏳ Waiting for rollout..."
