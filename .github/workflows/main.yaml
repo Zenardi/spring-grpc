@@ -29,8 +29,6 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/grpc-demo:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
   # --- CD PHASE: Deploy to KIND Cluster ---
   deploy-to-k8s:

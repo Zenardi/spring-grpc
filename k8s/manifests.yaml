@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: grpc-demo
-        image: ${DOCKERHUB_USERNAME}/grpc-demo:latest
+        image: zenardi/grpc-demo:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
